@@ -1,0 +1,41 @@
+name: EvTurM
+model_type: E2VSRModel
+scale: 1
+num_gpu: auto
+manual_seed: 0
+
+datasets:
+  test:
+    name: REDS4
+    type: VideoWithEventsTestDataset
+    dataroot_gt: datasets/test/gt
+    dataroot_lq: datasets/test/turb
+    meta_info_file: basicsr/data/meta_info/meta_info_evturm_h5_test.txt
+    io_backend:
+      type: hdf5
+
+# network structures
+network_g:
+  type: EvTurM
+  num_feat: 64
+  num_block: 30
+
+path:
+  pretrain_network_g: experiments/EvTurM/models/1.pth
+  strict_load_g: true
+
+# validation settings
+val:
+  save_img: true
+  flip_seq: false
+  suffix: ~  # add suffix to saved images, if None, use exp name
+
+  metrics:
+    psnr: 
+      type: calculate_psnr
+      crop_border: 0
+      test_y_channel: false
+    ssim:
+      type: calculate_ssim
+      crop_border: 0
+      test_y_channel: false
